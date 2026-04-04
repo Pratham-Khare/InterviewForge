@@ -1,0 +1,189 @@
+.subscription-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #020617, #020617 60%, #020617);
+  color: #e2e8f0;
+}
+
+/* container */
+
+.subscription-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 90px 20px;
+  text-align: center;
+}
+
+/* title */
+
+.subscription-title {
+  font-size: 46px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg,#8b5cf6,#ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* subtitle */
+
+.subscription-subtitle {
+  color: #94a3b8;
+  font-size: 16px;
+  margin-bottom: 70px;
+}
+
+/* grid */
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 40px;
+}
+
+/* card */
+
+.plan-card {
+  background: rgba(15,23,42,0.85);
+  border-radius: 20px;
+  padding: 45px 35px;
+  border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(14px);
+  transition: all .3s ease;
+  position: relative;
+
+  /* ADD THESE */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* hover */
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(139,92,246,0.35);
+  box-shadow: 0 20px 60px rgba(139,92,246,0.25);
+}
+
+/* popular highlight */
+
+.plan-card:nth-child(2) {
+  border: 1px solid rgba(139,92,246,0.4);
+  box-shadow: 0 10px 40px rgba(139,92,246,0.25);
+}
+
+/* plan title */
+
+.plan-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* price */
+
+.plan-price {
+  font-size: 44px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #f1f5f9;
+}
+
+/* tokens */
+
+.plan-tokens {
+  font-size: 18px;
+  color: #cbd5f5;
+  margin-bottom: 12px;
+}
+
+/* description */
+
+.plan-description {
+  color: #94a3b8;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+/* button */
+
+.plan-buy-btn {
+  background: linear-gradient(135deg,#7c3aed,#ec4899);
+  border: none;
+  padding: 12px 30px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all .25s ease;
+  width: 160px;
+  align-self: center;
+}
+
+.plan-buy-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 30px rgba(236,72,153,0.35);
+}
+
+/* responsive */
+
+@media (max-width: 900px) {
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-title {
+    font-size: 36px;
+  }
+
+}
+
+/* feature list */
+
+.plan-features {
+  text-align: left;
+  margin: 25px 0;
+  padding: 0;
+  list-style: none;
+
+  /* ADD THIS */
+  flex-grow: 1;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #cbd5f5;
+  font-size: 14px;
+}
+
+.plan-features .check {
+  color: #8b5cf6;
+  font-weight: bold;
+}
+
+/* popular card highlight */
+
+.plan-popular {
+  transform: scale(1.05);
+  border: 1px solid rgba(139,92,246,0.45);
+  box-shadow: 0 0 60px rgba(139,92,246,0.3);
+}
+
+/* badge */
+
+.plan-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg,#7c3aed,#ec4899);
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
