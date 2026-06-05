@@ -33,7 +33,8 @@ const Login = () => {
 
     const handleSocialLogin = (provider) => {
         // Redirect to backend OAuth providers (Google/GitHub).
-        window.location.href = `http://localhost:3000/api/auth/${provider}`;
+        window.location.href =
+    `${import.meta.env.VITE_API_URL}/api/auth/${provider}`;
     };
 
     if (loading) {

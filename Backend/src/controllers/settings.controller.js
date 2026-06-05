@@ -1,6 +1,6 @@
-const userModel = require("../models/user.model");
-const interviewReportModel = require("../models/interviewReport.model");
-const tokenBlacklistModel = require("../models/blacklist.model");
+import userModel from "../models/user.model.js";
+import interviewReportModel from "../models/interviewReport.model.js";
+import tokenBlacklistModel from "../models/blacklist.model.js";
 
 
 /**
@@ -166,8 +166,14 @@ async function deleteAccountController(req, res) {
     await interviewReportModel.deleteMany({ user: userId });
     await userModel.deleteOne({ _id: userId });
 
-    res.clearCookie("token");
-
+res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax"
+});
     res.status(200).json({
         message: "Account and all related data deleted successfully."
     });
@@ -197,7 +203,7 @@ async function uploadProfilePictureController(req, res) {
 
 
 
-module.exports = {
+export {
     getSettingsController,
     updateAccountSettingsController,
     updateAppearanceSettingsController,

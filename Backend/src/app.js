@@ -1,27 +1,29 @@
-const express = require("express")
-const cookieParser = require("cookie-parser")
-const cors = require("cors")
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
-const app = express()
+import authRouter from "./routes/auth.routes.js";
+import interviewRouter from "./routes/interview.routes.js";
+import settingsRouter from "./routes/settings.routes.js";
+import subscriptionRouter from "./routes/subscription.routes.js";
 
-app.use(express.json())
-app.use(cookieParser())
-app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
-}))
+const app = express();
 
-/* require all the routes here */
-const authRouter = require("./routes/auth.routes");
-const interviewRouter = require("./routes/interview.routes");
-const settingsRouter = require("./routes/settings.routes");
-const subscriptionRouter = require("./routes/subscription.routes")
+app.use(express.json());
 
+app.use(cookieParser());
+
+app.use(
+    cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true
+    })
+);
 
 /* using all the routes here */
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
 app.use("/api/settings", settingsRouter);
-app.use("/api/subscription", subscriptionRouter)
+app.use("/api/subscription", subscriptionRouter);
 
-module.exports = app;
+export default app;

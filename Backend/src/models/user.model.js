@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
 
         tokens: {
             type: Number,
-            default: 1, // first time user gets 1 free token
+            default: 1,
             min: 0
         },
 
@@ -58,7 +58,6 @@ const userSchema = new mongoose.Schema(
             enum: ["FREE", "STARTER", "PRO", "ULTIMATE"],
             default: "FREE"
         }
-
     },
     {
         timestamps: true
@@ -67,4 +66,4 @@ const userSchema = new mongoose.Schema(
 
 const userModel = mongoose.model("users", userSchema);
 
-module.exports = userModel;
+export default userModel;

@@ -1,8 +1,9 @@
-const PLANS = require("../config/plans")
-const { creditTokensToUser } = require("../services/subscription.service")
-const userModel = require("../models/user.model")
-const razorpay = require("../utils/razorpay")
-const crypto = require("crypto")
+import PLANS from "../config/plans.js";
+import { creditTokensToUser } from "../services/subscription.service.js";
+import userModel from "../models/user.model.js";
+import razorpay from "../utils/razorpay.js";
+import crypto from "crypto";
+import paymentModel from "../models/payment.model.js";
 
 async function getPlansController(req, res) {
 
@@ -63,12 +64,20 @@ async function createOrderController(req, res) {
         }
 
         const options = {
-            amount: selectedPlan.price * 100, // Razorpay uses paise
+            amount: selectedPlan.price * 100,
             currency: "INR",
             receipt: `receipt_${Date.now()}`
         }
 
         const order = await razorpay.orders.create(options)
+
+        await paymentModel.create({
+            user: req.user.id,
+            plan,
+            amount: selectedPlan.price,
+            orderId: order.id,
+            status: "PENDING"
+        })
 
         res.status(200).json({
             order,
@@ -98,6 +107,27 @@ async function verifyPaymentController(req, res) {
             plan
         } = req.body
 
+        const payment = await paymentModel.findOne({
+            orderId: razorpay_order_id
+        })
+
+        if (!payment) {
+
+            return res.status(404).json({
+                message: "Payment record not found"
+            })
+
+        }
+
+        if (payment.status === "SUCCESS") {
+
+            return res.status(200).json({
+    message: "Payment already processed",
+    tokens: req.user.tokens
+})
+
+        }
+
         const body = razorpay_order_id + "|" + razorpay_payment_id
 
         const expectedSignature = crypto
@@ -107,18 +137,44 @@ async function verifyPaymentController(req, res) {
 
         if (expectedSignature !== razorpay_signature) {
 
+            payment.status = "FAILED"
+            payment.failureReason = "SIGNATURE_VERIFICATION_FAILED"
+
+            await payment.save()
+
             return res.status(400).json({
                 message: "Payment verification failed"
             })
 
         }
 
-        const result = await creditTokensToUser(req.user.id, plan)
+        payment.paymentId = razorpay_payment_id
+        payment.signature = razorpay_signature
+        payment.status = "SUCCESS"
+
+        await payment.save()
+
+        if (!payment.isTokensCredited) {
+
+            const result = await creditTokensToUser(
+                req.user.id,
+                plan
+            )
+
+            payment.isTokensCredited = true
+
+            await payment.save()
+
+            return res.status(200).json({
+                message: "Payment successful",
+                tokens: result.tokens,
+                subscriptionPlan: result.plan
+            })
+
+        }
 
         res.status(200).json({
-            message: "Payment successful",
-            tokens: result.tokens,
-            subscriptionPlan: result.plan
+            message: "Payment already processed"
         })
 
     } catch (error) {
@@ -133,12 +189,62 @@ async function verifyPaymentController(req, res) {
 
 }
 
+async function paymentFailedController(req, res) {
 
+    try {
 
-module.exports = {
+        const {
+            orderId,
+            status,
+            failureReason
+        } = req.body
+
+        const payment = await paymentModel.findOne({
+            orderId
+        })
+
+        if (!payment) {
+
+            return res.status(404).json({
+                message: "Payment record not found"
+            })
+
+        }
+
+        if (payment.status === "SUCCESS") {
+
+            return res.status(200).json({
+                message: "Payment already completed"
+            })
+
+        }
+
+        payment.status = status
+        payment.failureReason = failureReason
+
+        await payment.save()
+
+        res.status(200).json({
+            message: "Payment status updated"
+        })
+
+    } catch (error) {
+
+        console.error(error)
+
+        res.status(500).json({
+            message: "Failed to update payment status"
+        })
+
+    }
+
+}
+
+export {
     getPlansController,
     purchasePlanController,
     getUserTokensController,
     createOrderController,
-    verifyPaymentController
-}
+    verifyPaymentController,
+    paymentFailedController
+};

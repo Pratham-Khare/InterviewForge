@@ -1,7 +1,7 @@
-const userModel = require("../models/user.model");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const tokenBlacklistModel = require("../models/blacklist.model");
+import userModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import tokenBlacklistModel from "../models/blacklist.model.js";
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
@@ -19,8 +19,15 @@ function signAndAttachToken(res, user) {
         { expiresIn: "1d" }
     );
 
-    res.cookie("token", token);
-
+res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
+    maxAge: 24 * 60 * 60 * 1000
+});
     return {
         id: user._id,
         username: user.username,
@@ -162,8 +169,14 @@ async function logoutUserController(req, res) {
         await tokenBlacklistModel.create({ token })
     }
 
-    res.clearCookie("token");
-
+res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax"
+});
     res.status(200).json({
         message: "User logged out successfully"
     });
@@ -370,7 +383,7 @@ async function githubOAuthCallbackController(req, res) {
     }
 }
 
-module.exports = {
+export {
     registerUserController,
     loginUserController,
     logoutUserController,

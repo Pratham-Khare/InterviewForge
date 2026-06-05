@@ -1,41 +1,48 @@
-const express = require("express")
-const authMiddleware = require("../middlewares/auth.middleware")
+import express from "express";
 
+import { authUser } from "../middlewares/auth.middleware.js";
 
-const {
+import {
     getPlansController,
     purchasePlanController,
     getUserTokensController,
     createOrderController,
-    verifyPaymentController
-} = require("../controllers/subscription.controller")
+    verifyPaymentController,
+    paymentFailedController
+} from "../controllers/subscription.controller.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/plans", getPlansController)
+router.get("/plans", getPlansController);
 
 router.get(
     "/tokens",
-    authMiddleware.authUser,
+    authUser,
     getUserTokensController
-)
+);
 
 router.post(
     "/purchase",
-    authMiddleware.authUser,
+    authUser,
     purchasePlanController
-)
+);
 
 router.post(
     "/create-order",
-    authMiddleware.authUser,
+    authUser,
     createOrderController
-)
+);
 
 router.post(
     "/verify-payment",
-    authMiddleware.authUser,
+    authUser,
     verifyPaymentController
+);
+
+router.post(
+    "/payment-failed",
+    authUser,
+    paymentFailedController
 )
 
-module.exports = router
+export default router;

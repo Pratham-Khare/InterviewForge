@@ -3,14 +3,17 @@ import PlanCard from "../components/PlanCard"
 import {
     getSubscriptionPlans,
     createOrder,
-    verifyPayment
+    verifyPayment,
+    reportFailedPayment
 } from "../services/subscription.api"
 
 import UserNavbar from "../../auth/components/UserNavbar"
 import "../style/subscription.scss"
+import { useContext } from "react"
+import { AuthContext } from "../../auth/auth.context"
 
 const Subscription = () => {
-
+    const { user, setUser } = useContext(AuthContext)
     const [plans, setPlans] = useState({})
 
     const fetchPlans = async () => {
@@ -55,9 +58,27 @@ const Subscription = () => {
 
                     const result = await verifyPayment(verifyData)
 
+                    setUser({
+                        ...user,
+                        tokens: result.tokens,
+                        subscriptionPlan: result.subscriptionPlan
+                    })
+
                     alert("Payment successful! Tokens credited.")
 
-                    console.log(result)
+                },
+
+                modal: {
+
+                    ondismiss: async function () {
+
+                        await reportFailedPayment({
+                            orderId: order.id,
+                            status: "CANCELLED",
+                            failureReason: "USER_DISMISSED_CHECKOUT"
+                        })
+
+                    }
 
                 },
 
@@ -68,6 +89,22 @@ const Subscription = () => {
             }
 
             const razorpay = new window.Razorpay(options)
+
+            razorpay.on("payment.failed", async function (response) {
+
+                await reportFailedPayment({
+
+                    orderId: order.id,
+
+                    status: "FAILED",
+
+                    failureReason:
+                        response.error?.description ||
+                        "PAYMENT_FAILED"
+
+                })
+
+            })
 
             razorpay.open()
 

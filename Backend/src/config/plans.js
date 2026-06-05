@@ -1,7 +1,7 @@
 const PLANS = {
     STARTER: {
         name: "Starter",
-        price: 199, // price in INR
+        price: 199,
         tokens: 10,
         description: "Perfect for light interview preparation"
     },
@@ -19,6 +19,6 @@ const PLANS = {
         tokens: 100,
         description: "Unlimited practice for top candidates"
     }
-}
+};
 
-module.exports = PLANS
+export default PLANS;

@@ -1,12 +1,18 @@
-const express = require("express")
-const authMiddleware = require("../middlewares/auth.middleware")
-const interviewController = require("../controllers/interview.controller")
-const upload = require("../middlewares/file.middleware")
+import express from "express";
 
-const { checkUserTokens } = require("../middlewares/token.middleware")
+import { authUser } from "../middlewares/auth.middleware.js";
+import {
+    generateInterViewReportController,
+    getInterviewReportByIdController,
+    getAllInterviewReportsController,
+    generateResumePdfController
+} from "../controllers/interview.controller.js";
 
-const interviewRouter = express.Router()
+import upload from "../middlewares/file.middleware.js";
 
+import { checkUserTokens } from "../middlewares/token.middleware.js";
+
+const interviewRouter = express.Router();
 
 /**
  * @route POST /api/interview/
@@ -15,12 +21,11 @@ const interviewRouter = express.Router()
  */
 interviewRouter.post(
     "/",
-    authMiddleware.authUser,
+    authUser,
     checkUserTokens,
     upload.single("resume"),
-    interviewController.generateInterViewReportController
-)
-
+    generateInterViewReportController
+);
 
 /**
  * @route GET /api/interview/report/:interviewId
@@ -29,10 +34,9 @@ interviewRouter.post(
  */
 interviewRouter.get(
     "/report/:interviewId",
-    authMiddleware.authUser,
-    interviewController.getInterviewReportByIdController
-)
-
+    authUser,
+    getInterviewReportByIdController
+);
 
 /**
  * @route GET /api/interview/
@@ -41,10 +45,9 @@ interviewRouter.get(
  */
 interviewRouter.get(
     "/",
-    authMiddleware.authUser,
-    interviewController.getAllInterviewReportsController
-)
-
+    authUser,
+    getAllInterviewReportsController
+);
 
 /**
  * @route POST /api/interview/resume/pdf/:interviewReportId
@@ -53,9 +56,9 @@ interviewRouter.get(
  */
 interviewRouter.post(
     "/resume/pdf/:interviewReportId",
-    authMiddleware.authUser,
+    authUser,
     checkUserTokens,
-    interviewController.generateResumePdfController
-)
+    generateResumePdfController
+);
 
-module.exports = interviewRouter
+export default interviewRouter;

@@ -1,29 +1,47 @@
-const userModel = require("../models/user.model")
-const PLANS = require("../config/plans")
+import userModel from "../models/user.model.js";
+import PLANS from "../config/plans.js";
 
 async function creditTokensToUser(userId, planName) {
-
-    const plan = PLANS[planName]
+    const plan = PLANS[planName];
 
     if (!plan) {
-        throw new Error("Invalid subscription plan")
+        throw new Error("Invalid subscription plan");
     }
 
-    const user = await userModel.findById(userId)
+    const user = await userModel.findById(userId);
 
     if (!user) {
-        throw new Error("User not found")
+        throw new Error("User not found");
     }
 
-    user.tokens += plan.tokens
-    user.subscriptionPlan = planName
+    user.tokens += plan.tokens;
+    user.subscriptionPlan = planName;
 
-    await user.save()
+    await user.save();
 
     return {
         tokens: user.tokens,
         plan: user.subscriptionPlan
-    }
+    };
 }
 
-module.exports = { creditTokensToUser }
+export async function reportFailedPayment(data) {
+
+    try {
+
+        const response = await api.post(
+            "/api/subscription/payment-failed",
+            data
+        )
+
+        return response.data
+
+    } catch (error) {
+
+        console.error("Failed to update payment status", error)
+
+    }
+
+}
+
+export { creditTokensToUser };

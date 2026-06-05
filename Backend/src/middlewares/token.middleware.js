@@ -1,4 +1,4 @@
-const userModel = require("../models/user.model");
+import userModel from "../models/user.model.js";
 
 async function checkUserTokens(req, res, next) {
     try {
@@ -11,10 +11,9 @@ async function checkUserTokens(req, res, next) {
             });
         }
 
-        // Block request if tokens are exhausted[cite: 6, 7]
         if (user.tokens <= 0) {
             return res.status(403).json({
-                message: "NO_TOKENS" // Critical string for Frontend Hook
+                message: "NO_TOKENS"
             });
         }
 
@@ -27,4 +26,4 @@ async function checkUserTokens(req, res, next) {
     }
 }
 
-module.exports = { checkUserTokens };
+export { checkUserTokens };
