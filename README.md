@@ -1,6 +1,6 @@
-# 🚀 AI Interview Pro
+# 🚀 Interview Pro
 
-An AI-powered interview preparation and career development platform built using the MERN Stack. The platform helps users generate AI-powered interview reports from their resumes, manage subscriptions, purchase tokens, and improve interview readiness through intelligent feedback.
+An interview preparation and career development platform built using the MERN Stack. The platform helps users generate AI-powered interview reports from their resumes, manage subscriptions, purchase tokens, and improve interview readiness through intelligent feedback.
 
 ---
 
@@ -16,11 +16,9 @@ An AI-powered interview preparation and career development platform built using 
 ## 🤖 AI Interview Analysis
 - Resume Upload
 - AI-Powered Report Generation
-- Personalized Interview Feedback
 - Interview Report Storage
 
 ## 📄 Resume Processing
-- PDF Resume Parsing
 - Resume Analysis
 - Report Generation
 
@@ -32,10 +30,7 @@ An AI-powered interview preparation and career development platform built using 
 - Automatic Token Updates
 
 ## ⚙️ User Settings
-- Theme Preferences
 - Account Settings
-- Notification Preferences
-
 ---
 
 # 🏗️ Tech Stack
@@ -44,8 +39,6 @@ An AI-powered interview preparation and career development platform built using 
 - React.js
 - React Router
 - Axios
-- React Hot Toast
-- SCSS
 
 ## Backend
 - Node.js
@@ -59,9 +52,6 @@ An AI-powered interview preparation and career development platform built using 
 - Google Gemini AI
 - Cloudinary
 - Razorpay
-- Puppeteer
-- PDF Parse
-
 ---
 
 # 📂 Project Structure
@@ -247,11 +237,8 @@ npm run dev
 
 # 🚀 Future Enhancements
 
-- Interview Analytics Dashboard
 - AI Career Roadmap Generator
 - Voice-Based Mock Interviews
-- Resume Scoring System
-- Email Notifications
 - Admin Dashboard
 
 ---
