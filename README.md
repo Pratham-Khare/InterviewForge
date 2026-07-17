@@ -59,7 +59,7 @@ An Interview preparation and career development platform built using the MERN St
 # 📂 Project Structure
 
 ```text
-interview-pro/
+interviewForge/
 │
 ├── Frontend/
 │   ├── src/
@@ -99,9 +99,7 @@ AI Report Generation
 Save Report to MongoDB
         ↓
 View Generated Report
-        ↓
-Purchase Subscription (Optional)
-        ↓
+        ↓        
 Tokens Updated
 ```
 
@@ -240,11 +238,8 @@ npm run dev
 # 🚀 Future Enhancements
 
 - Interview Analytics Dashboard
-- AI Career Roadmap Generator
 - Voice-Based Mock Interviews
 - Resume Scoring System
-- Email Notifications
-- Admin Dashboard
 
 ---
 
